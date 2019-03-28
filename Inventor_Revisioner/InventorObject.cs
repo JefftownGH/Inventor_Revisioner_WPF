@@ -19,6 +19,7 @@ namespace Inventor_Revisioner
         private string DrawingPathWithRev { get; set; }
         private string PathWithDocument { get; set; }
         private string Directory { get; set; }
+        private string Prefix { get; set; }
         protected virtual string FileExtension { get; set; }
         protected virtual string ObjectType { get; set; }
 
@@ -63,7 +64,7 @@ namespace Inventor_Revisioner
         private void NextRevision()
         {
             // Revision Setup
-            var prefix = this.HasRevision ? Utility.NummericRevision(this.DocumentName) : "01";
+            this.Prefix = this.HasRevision ? Utility.NummericRevision(this.DocumentName) : "01";
             if (this.HasRevision)
             {
                 var delimiter = this.PathWithDocument.LastIndexOf('R') - 1;
@@ -72,8 +73,8 @@ namespace Inventor_Revisioner
 
             // Copy pre-setup
             this.DrawingPath = $"{this.FullPath.Substring(0, this.FullPath.Length - 4)}.idw";
-            this.FullPathWithRev = $"{this.PathWithDocument } Rev.{prefix}{this.FileExtension}";
-            this.DrawingPathWithRev = $"{this.PathWithDocument } Rev.{prefix}.idw";
+            this.FullPathWithRev = $"{this.PathWithDocument } Rev.{this.Prefix}{this.FileExtension}";
+            this.DrawingPathWithRev = $"{this.PathWithDocument } Rev.{this.Prefix}.idw";
 
             if (File.Exists(FullPathWithRev) || File.Exists(DrawingPathWithRev))
             {
@@ -146,6 +147,8 @@ namespace Inventor_Revisioner
                     MessageBox.Show("Da hat etwas nicht funktioniert: " + error.Message);
                     throw;
                 }
+                // Set the new partnumber
+                this.setPartNumber(this.Prefix);
                 // Save drawing
                 this._inventorObject.ActiveDocument.Save();
                 // Close drawing
@@ -162,6 +165,17 @@ namespace Inventor_Revisioner
             this.NextRevision();
             // Replace the reference to the assembly / part in the drawing
             this.OpenDrawingAndReplace();
+        }
+
+        private string getPartNumber()
+        {
+            return _inventorObject.ActiveDocument.PropertySets["Design Tracking Properties"]["Part Number"].Value;
+        }
+
+        private void setPartNumber(string prefix)
+        {
+            var partNumber = this.getPartNumber();
+            _inventorObject.ActiveDocument.PropertySets["Design Tracking Properties"]["Part Number"].Value = $"{partNumber} Rev.{prefix}";
         }
 
     }
