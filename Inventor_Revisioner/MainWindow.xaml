@@ -5,8 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Inventor_Revisioner"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Inventor Revisioner" Height="170" Width="350" Loaded="Window_Loaded">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="1" Grid.Row="1">Dateiname</TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="2">Zeichnung vorhanden?</TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="3">Revision vorhanden?</TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="4">Nächste Revision</TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="1" x:Name="lblDocumentName">Dateiname</TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="2" x:Name="lblIsDrawing">Zeichnung vorhanden</TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="3" x:Name="lblHasRevision">Revision vorhanden</TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="4" x:Name="lblNextRevision">Nächste Revision</TextBlock>
+        <Button Height="30" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" Margin="10" Click="cmdRevisionize_Click" x:Name="cmdRevisionize">Revisionier Baugruppe / Bauteil</Button>
     </Grid>
 </Window>
