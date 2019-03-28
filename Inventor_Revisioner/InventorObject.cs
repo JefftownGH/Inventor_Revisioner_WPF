@@ -116,7 +116,25 @@ namespace Inventor_Revisioner
                 }
 
             }
+            // Update the partnumber
+            this.UpdatePartNumber();
 
+        }
+
+        private void UpdatePartNumber()
+        {
+            // Silent Inventor on
+            this._inventorObject.SilentOperation = true;
+            // Open the revisionized InventorObject
+            this._inventorObject.Documents.Open(this.FullPathWithRev, true);
+            // Update the partnumber
+            this.SetPartNumber(this.Prefix);
+            // Save InventorObject
+            this._inventorObject.ActiveDocument.Save();
+            // Close InventorObject
+            this._inventorObject.ActiveDocument.Close();
+            // Silent Inventor off
+            this._inventorObject.SilentOperation = false;
         }
 
         private void OpenDrawingAndReplace()
@@ -148,7 +166,7 @@ namespace Inventor_Revisioner
                     throw;
                 }
                 // Set the new partnumber
-                this.setPartNumber(this.Prefix);
+                this.SetPartNumber(this.Prefix);
                 // Save drawing
                 this._inventorObject.ActiveDocument.Save();
                 // Close drawing
@@ -167,14 +185,15 @@ namespace Inventor_Revisioner
             this.OpenDrawingAndReplace();
         }
 
-        private string getPartNumber()
+        private string GetPartNumber()
         {
             return _inventorObject.ActiveDocument.PropertySets["Design Tracking Properties"]["Part Number"].Value;
         }
 
-        private void setPartNumber(string prefix)
+        private void SetPartNumber(string prefix)
         {
-            var partNumber = this.getPartNumber();
+            var partNumber = this.GetPartNumber();
+            // TODO: if the partnumber has a revision, delete it
             _inventorObject.ActiveDocument.PropertySets["Design Tracking Properties"]["Part Number"].Value = $"{partNumber} Rev.{prefix}";
         }
 
